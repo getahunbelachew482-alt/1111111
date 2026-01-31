@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>መንፈሳዊ ማዕድ | G-Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #e67e22; /* ብርቱካንማ */
+            --bg: #050a1b;      /* ጥቁር ሰማያዊ */
+            --card: #1c2732;
+            --text: #f1f1f1;
+            --muted: #9ca3af;
+            --brana: #f4e4bc;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+        /* Sidebar Menu */
+        .side-menu { position: fixed; left: -280px; top: 0; width: 260px; height: 100%; background: var(--card); z-index: 2000; transition: 0.3s; box-shadow: 5px 0 15px rgba(0,0,0,0.5); border-right: 2px solid var(--primary); }
+        .side-menu.active { left: 0; }
+        .menu-header { background: var(--primary); padding: 30px 20px; font-weight: bold; font-size: 20px; text-align: center; color: white; }
+        .menu-item { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; display: flex; align-items: center; gap: 12px; font-weight: 500; }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; z-index: 1500; }
+        .overlay.active { display: block; }
+
+        /* Header & Search */
+        header { background: var(--card); padding: 10px 15px; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--primary); }
+        .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+        .search-box { background: rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; padding: 5px 12px; }
+        .search-box input { background: none; border: none; color: white; width: 100%; outline: none; padding: 8px; font-size: 16px; }
+
+        /* Navigation Tabs */
+        .nav-tabs { display: flex; background: var(--bg); position: sticky; top: 110px; z-index: 900; border-bottom: 1px solid var(--card); }
+        .tab { flex: 1; text-align: center; padding: 15px; cursor: pointer; font-weight: bold; color: var(--muted); transition: 0.3s; }
+        .tab.active { color: var(--primary); border-bottom: 3px solid var(--primary); background: rgba(230, 126, 34, 0.05); }
+
+        .container { padding: 15px; max-width: 600px; margin: auto; }
+        .section-title { font-size: 20px; border-left: 4px solid var(--primary); padding-left: 10px; margin: 20px 0; color: var(--primary); }
+
+        /* Books Grid */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .item-card { background: var(--brana); color: #2c1e14; border-radius: 8px; padding: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); border: 1px solid #c4a484; }
+        .item-card h3 { font-size: 14px; margin: 10px 0; color: #b01b1b; }
+        .btn-action { background: #b01b1b; color: white; border: none; padding: 10px; border-radius: 5px; width: 100%; cursor: pointer; font-weight: bold; }
+
+        /* Singer List */
+        .singer-row { background: var(--card); padding: 15px; border-radius: 10px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); }
+        .song-container { background: rgba(0,0,0,0.2); border-radius: 10px; padding: 5px 15px; margin-bottom: 15px; border: 1px dashed var(--primary); }
+        .song-item { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
+
+        /* Advice Card */
+        .advice-card { background: #fdfcf0; color: #2c3e50; padding: 20px; border-radius: 15px; border-left: 8px solid var(--primary); margin-bottom: 20px; line-height: 1.6; }
+        .author { display: block; margin-top: 10px; font-weight: bold; color: #b01b1b; text-align: right; }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+<div class="side-menu" id="sideMenu">
+    <div class="menu-header">መንፈሳዊ ማዕድ</div>
+    <div class="menu-item" onclick="showTab('books')"><i class="fa-solid fa-book"></i> መጻሕፍት</div>
+    <div class="menu-item" onclick="showTab('songs')"><i class="fa-solid fa-music"></i> ዝማሬዎች</div>
+    <div class="menu-item" onclick="showTab('advice')"><i class="fa-solid fa-hands-praying"></i> ምክረ አበው</div>
+    <div class="menu-item" onclick="alert('በጌታሁን በላቸው የተዘጋጀ - 2018')"><i class="fa-solid fa-info-circle"></i> ስለ አፑ</div>
+</div>
+
+<header>
+    <div class="header-top">
+        <i class="fa-solid fa-bars" onclick="openMenu()" style="font-size: 24px; cursor: pointer;"></i>
+        <div style="font-weight: bold; font-size: 20px;">መንፈሳዊ ማዕድ</div>
+        <i class="fa-solid fa-bell" style="font-size: 20px; color: var(--primary);"></i>
+    </div>
+    <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass" style="color: var(--muted); margin-right: 10px;"></i>
+        <input type="text" id="searchInput" placeholder="መጽሐፍ ወይም ዘማሪ ፈልግ..." onkeyup="search()">
+    </div>
+</header>
+
+<div class="nav-tabs">
+    <div class="tab active" id="t-books" onclick="showTab('books')">መጻሕፍት</div>
+    <div class="tab" id="t-songs" onclick="showTab('songs')">ዝማሬዎች</div>
+    <div class="tab" id="t-advice" onclick="showTab('advice')">ምክር</div>
+</div>
+
+<div class="container">
+
+    <!-- መጻሕፍት ገጽ -->
+    <div id="books-page" class="page-content">
+        <h2 class="section-title">መጻሕፍት (PDF)</h2>
+        <div class="grid" id="booksGrid">
+            <div class="item-card" data-name="መንፈሳዊ ወግ">
+                <h3>፩. መንፈሳዊ ወግ</h3>
+                <a href="book/wege.pdf"><button class="btn-action">አንብብ</button></a>
+            </div>
+            <div class="item-card" data-name="ሃይማኖተ አበው">
+                <h3>፪. ሃይማኖተ አበው</h3>
+                <a href="book/lemuslim.pdf"><button class="btn-action">አንብብ</button></a>
+            </div>
+            <div class="item-card" data-name="ኦርቶዶክስ መልስ አላት">
+                <h3>፫. ኦርቶዶክስ መልስ አላት</h3>
+                <a href="book/orto.pdf"><button class="btn-action">አንብብ</button></a>
+            </div>
+            <div class="item-card" data-name="ፍኖተ ስብከት">
+                <h3>፬. ፍኖተ ስብከት</h3>
+                <a href="book/fnot.pdf"><button class="btn-action">አንብብ</button></a>
+            </div>
+            <div class="item-card" data-name="ምስጢሬን ላካፍላችሁ">
+                <h3>፭. ምስጢሬን ላካፍላችሁ</h3>
+                <a href="book/mis.pdf"><button class="btn-action">አንብብ</button></a>
+            </div>
+            <div class="item-card" data-name="ነገረ ማርያም">
+                <h3>፮. ነገረ ማርያም</h3>
+                <a href="book/mari.pdf"><button class="btn-action">አንብብ</button></a>
+            </div>
+            <div class="item-card" data-name="መጽሐፈ ቅዳሴ"><h3>፯. መጽሐፈ ቅዳሴ</h3><button class="btn-action">አንብብ</button></div>
+            <div class="item-card" data-name="መዝሙረ ዳዊት"><h3>፰. መዝሙረ ዳዊት</h3><button class="btn-action">አንብብ</button></div>
+            <div class="item-card" data-name="አክሲማሮስ"><h3>፱. አክሲማሮስ</h3><button class="btn-action">አንብብ</button></div>
+            <div class="item-card" data-name="ግብረ ሕማማት"><h3>፲. ግብረ ሕማማት</h3><button class="btn-action">አንብብ</button></div>
+        </div>
+    </div>
+
+    <!-- ዝማሬዎች ገጽ (20 ዘማሪዎች) -->
+    <div id="songs-page" class="page-content hidden">
+        <h2 class="section-title">ዝማሬዎች (20 ዘማሪዎች)</h2>
+        <div id="singersContainer"></div>
+    </div>
+
+    <!-- ምክር ገጽ -->
+    <div id="advice-page" class="page-content hidden">
+        <h2 class="section-title">ምክረ አበው</h2>
+        <div class="advice-card">"ጸሎት ማለት ከእግዚአብሔር ጋር መነጋገር ነው። በጸሎት ጊዜ ልብህ ከሰማይ ጋር ይገናኛል"<span class="author">- ቅዱስ አቡነ ሺኖዳ</span></div>
+        <div class="advice-card">"ትሕትና የጽድቅ ሁሉ መሠረት ናት። ያለ ትሕትና የሚደረግ ተጋድሎ ሁሉ ከንቱ ነው።"<span class="author">- ቅዱስ አባ አንጦንስ</span></div>
+        <div class="advice-card">"ልጄ ሆይ! በትዕግሥት ውስጥ ሕይወት አለች። እግዚአብሔር በጊዜው ሁሉንም ነገር ያደርጋል።"<span class="author">- አባ አያየው</span></div>
+        <div class="advice-card">"በፈተና ጊዜ እግዚአብሔርን ከማመስገን አትቦዝን።"<span class="author">- ምክረ አበው</span></div>
+        <div class="advice-card">"ፍቅር የሕግ ሁሉ ፍጻሜ ነው።"<span class="author">- ምክረ አበው</span></div>
+    </div>
+
+</div>
+
+<script>
+    const singersList = [
+        "ምርትነሽ ጥላሁን", "ዲ/ን አቤል መክብብ", "ይልማ ሀይሉ", "ቴዎድሮስ ዮሴፍ", 
+        "ፋንቱ ወልዴ", "ታደለ በቀለ", "ዘርፌ ከበደ", "ግርማ በቀለ", 
+        "መሳይ ተፈራ", "ጌትነት ከበደ", "በረከት መርዕድ", "ኪነጥበብ ወ/ቂርቆስ", 
+        "ይዝአለም በየነ", "አምሳሉ በቀለ", "ዳግማዊት ካሳሁን", "ኤፍሬም ያዕቆብ", 
+        "ማርታ ኃይለማርያም", "ሱራፌል ደምሴ", "ዮሴፍ በቀለ", "ምርትነሽ በላይ"
+    ];
+
+    function initSingers() {
+        const container = document.getElementById('singersContainer');
+        singersList.forEach((name, index) => {
+            let html = `
+                <div class="singer-row" onclick="toggleSongs(${index})" data-name="${name}">
+                    <span><i class="fa-solid fa-user-check" style="color:var(--primary); margin-right:10px;"></i> ${name}</span>
+                    <i class="fa-solid fa-chevron-down" id="icon-${index}"></i>
+                </div>
+                <div id="list-${index}" class="song-container hidden">`;
+            for(let i=1; i<=10; i++) {
+                html += `
+                    <div class="song-item">
+                        <span>ዝማሬ ${i}</span>
+                        <i class="fa-solid fa-play-circle" style="color:var(--primary); font-size:20px; cursor:pointer;" onclick="event.stopPropagation(); playSong(${index}, ${i})"></i>
+                    </div>`;
+            }
+            html += `</div>`;
+            container.innerHTML += html;
+        });
+    }
+
+    function toggleSongs(idx) {
+        document.getElementById(`list-${idx}`).classList.toggle('hidden');
+        document.getElementById(`icon-${idx}`).classList.toggle('fa-rotate-180');
+    }
+
+    function playSong(sIdx, sNum) {
+        alert(`${singersList[sIdx]} - ዝማሬ ${sNum} ይጫወታል...`);
+    }
+
+    function showTab(id) {
+        document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(id + '-page').classList.remove('hidden');
+        document.getElementById('t-' + id).classList.add('active');
+        closeMenu();
+        window.scrollTo(0,0);
+    }
+
+    function openMenu() {
+        document.getElementById('sideMenu').classList.add('active');
+        document.getElementById('overlay').classList.add('active');
+    }
+
+    function closeMenu() {
+        document.getElementById('sideMenu').classList.remove('active');
+        document.getElementById('overlay').classList.remove('active');
+    }
+
+    function search() {
+        let input = document.getElementById('searchInput').value.toLowerCase();
+        document.querySelectorAll('.item-card, .singer-row').forEach(item => {
+            let text = item.getAttribute('data-name').toLowerCase();
+            item.style.display = text.includes(input) ? "" : "none";
+        });
+    }
+
+    initSingers();
+</script>
+</body>
+</html>
